@@ -1,10 +1,2 @@
-﻿  file_system.cpp
-  main.cpp
-D:\Github Projects\file-system-simulator\FileSystemSimulator\FileSystemSimulator\main.cpp(57,12): warning C4244: 'bağımsız değişken': 'time_t' - 'unsigned int' dönüşümü; veri kaybı olabilir
-  process_command.cpp
-  process_command.h
-  recycle_bin.cpp
-  time_utils.cpp
-  Kod Üretiliyor...
-x64\Debug\process_command.obj : warning LNK4042: Nesne birden çok kez belirtildi; fazla olanlar yoksayıldı
+﻿  merge_sort.cpp
   FileSystemSimulator.vcxproj -> D:\Github Projects\file-system-simulator\FileSystemSimulator\x64\Debug\FileSystemSimulator.exe

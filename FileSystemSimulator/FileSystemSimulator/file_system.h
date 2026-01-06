@@ -3,9 +3,13 @@
 #include <ctime>
 #include <vector>
 using namespace std;
+struct SizeInfo {
+	long long value;
+	int unit; // 0=B, 1=KB, 2=MB, 3=GB
+};
 struct Inode {
 	int fileID;
-	long long fileSize;
+	long long fileSize; // Byte
 	string createdTimeStr;
 	string lastModifiedTimeStr;
 };
@@ -29,6 +33,9 @@ private:
 	vector<string> audioExtensions = { "mp3", "wav" };
 	long long generateSizeByExtension(const string& fileName);
 	void updateParentSizes(FileNode* node, long long sizeChange);
+	SizeInfo getNormalizedSize(long long size);
+	string getUnitStr(int unit);
+	void printFiles(vector<FileNode*> files);
 public: 
 	FileSystemManager();
 	~FileSystemManager();
@@ -41,6 +48,8 @@ public:
 	void deleteFile(FileNode* parentFile,const string& fileName);
 	void renameFile(const string& fileName, const string& newName);
 	void list();
+	void listBySize();
+	void listByName();
 	void cd(const string& name);
 	void cdUp();
 	void printCurrentPath();

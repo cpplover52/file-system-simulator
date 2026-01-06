@@ -33,7 +33,13 @@
     <ClCompile Include="time_utils.cpp">
       <Filter>Kaynak Dosyaları</Filter>
     </ClCompile>
+    <ClCompile Include="quick_sort.cpp">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
     <ClCompile Include="sort_utils.cpp">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
+    <ClCompile Include="merge_sort.cpp">
       <Filter>Kaynak Dosyaları</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,7 +53,13 @@
     <ClInclude Include="time_utils.h">
       <Filter>Kaynak Dosyaları</Filter>
     </ClInclude>
+    <ClInclude Include="quick_sort.h">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClInclude>
     <ClInclude Include="sort_utils.h">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClInclude>
+    <ClInclude Include="merge_sort.h">
       <Filter>Kaynak Dosyaları</Filter>
     </ClInclude>
   </ItemGroup>
