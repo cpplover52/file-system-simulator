@@ -14,4 +14,41 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
+    <ClCompile Include="file_system.cpp">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
+    <ClCompile Include="process_command.h">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
+    <ClCompile Include="process_command.cpp">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
+    <ClCompile Include="recycle_bin.cpp">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
+    <ClCompile Include="time_utils.cpp">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
+    <ClCompile Include="sort_utils.cpp">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="file_system.h">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClInclude>
+    <ClInclude Include="recycle_bin.h">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClInclude>
+    <ClInclude Include="time_utils.h">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClInclude>
+    <ClInclude Include="sort_utils.h">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
