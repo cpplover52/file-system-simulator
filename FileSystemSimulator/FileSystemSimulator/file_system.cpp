@@ -54,11 +54,10 @@ void FileSystemManager::undo() {
 		redoStack.push(cmd);
 	}
 	else if (cmd.type == CMD_RENAME) {
-		// Ýsim deðiþtirmeyi geri al -> Eski isme (oldName) dön
-		// Manuel rename iþlemi yapýyoruz (fonksiyonu çaðýrmýyoruz ki tekrar stack'e girmesin)
+		// Isim degistirmeyi geri al -> Eski isme (oldName) don
 		auto it = findFileIterator(cmd.parentNode, cmd.fileName);
 		if (it != cmd.parentNode->childFiles.end()) {
-			(*it)->fileName = cmd.oldName;
+			(*it)->fileName = cmd.oldName; // Eski isme geri donus
 			cout << "Undo: Isim " << cmd.oldName << " olarak geri alindi.\n";
 		}
 		redoStack.push(cmd);
@@ -476,18 +475,21 @@ void FileSystemManager::renameFile(const string& fileName, const string& newName
 	if(file == nullptr){
 		return;
 	}
+
+	Command cmd;
+	cmd.type = CMD_RENAME; 
+	cmd.fileName = newName; // Yeni hali (Undo bunu arayacak)
+	cmd.oldName = fileName; // Eski hali (Undo buna geri dondurecek)
+	cmd.parentNode = current;
+	undoStack.push(cmd);
+	// Yeni islem yapildiginda Redo stack temizlenmeli
+	while (!redoStack.isEmpty()) redoStack.pop();
+
 	file->fileName = newName;
 	file->fileInode.lastModifyTime = getCurrentTime();
 	cout << fileName << " dosyasinin ismi '" << newName << "' olarak degistirildi.\n";
-	// --- UNDO ICIN KAYIT ---
-	Command cmd;
-	cmd.type = CMD_CREATE;
-	cmd.fileName = fileName;
-	cmd.parentNode = current;
-	undoStack.push(cmd);
 
-	// Yeni islem yapildiginda Redo stack temizlenmeli
-	while (!redoStack.isEmpty()) redoStack.pop();
+	
 }
 void FileSystemManager::list() { // No sorting
 	cout << "-------------------\n";
