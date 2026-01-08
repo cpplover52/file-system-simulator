@@ -3,7 +3,20 @@
 #include <ctime>
 #include <string>
 #include <iostream>
-std::string calculateFullTime() {
+
+FullTime::FullTime() {
+    setFullTime();
+}
+std::string FullTime::getFullTimeStr() {
+    std::string fullTime = std::to_string(day) + " " +
+        monthName + " " +
+        std::to_string(year) + " " +
+        dayOfWeek + " " +
+        std::to_string(hour) + ":" +
+        std::to_string(min); // Ornek: 12 Ocak Pazartesi 14:00
+    return fullTime;
+}
+void FullTime::setFullTime() {
     std::time_t t = time(NULL);
     std::tm* now = std::localtime(&t);
     int year = now->tm_year + 1900;
@@ -76,11 +89,16 @@ std::string calculateFullTime() {
         dayOfWeek = "Pazar";
         break;
     }
-    std::string fullTime = std::to_string(now->tm_mday) + " " +
-        monthName + " " +
-        std::to_string(now->tm_year + 1900) + " " +
-        dayOfWeek + " " +
-        std::to_string(now->tm_hour) + ":" +
-        std::to_string(now->tm_min); // Ornek: 12 Ocak Pazartesi 14:00
-    return fullTime;
+    this->day = day;
+    this->month = month;
+    this->year = year;
+    this->dayOfWeek = dayOfWeek;
+    this->monthName = monthName;
+    this->hour = hour;
+    this->min = min;
+}
+
+FullTime getCurrentTime() {
+    FullTime ft;
+    return ft;
 }

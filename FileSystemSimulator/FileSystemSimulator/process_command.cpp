@@ -5,71 +5,82 @@
 using std::string;
 using std::cout;
 using std::cin;
-//string commands[] = {"help","finfo" ,"cfi" ,"cfo","df","ref","cl","ls","exit" };
+using std::stringstream;
+
 void processCommand(FileSystemManager& fsm, const string& input) {
-	string command;
-	string argument;
 	stringstream ss(input);
-	ss >> command;
-	getline(ss, argument);
-	if (!argument.empty() && argument[0] == ' ') {
-		argument.erase(0, 1);
-	}
+	string command, arg1, arg2;
+
+	// Ýlk kelime komut, diðerleri argüman
+	ss >> command >> arg1 >> arg2;
+
 	if (command == "help") {
 		fsm.printCommands();
 	}
+	else if (command == "undo") {
+		fsm.undo();
+	}
+	else if (command == "redo") {
+		fsm.redo();
+	}
 	else if (command == "finfo") {
-		FileNode* file = fsm.findFile(fsm.getCurrent(), argument);
-		if (file == nullptr) return;
-
-		fsm.showFileInfos(file);
+		FileNode* file = fsm.findFile(fsm.getCurrent(), arg1);
+		if (file == nullptr) cout << "Dosya bulunamadi.\n";
+		else fsm.showFileInfos(file);
 	}
 	else if (command == "cfi") {
-		FileNode* temp = fsm.findFile(fsm.getCurrent(), argument);
-		if (temp != nullptr && !temp->isFolder) {
-			cout << "Mevcut konumda ayný isimle bir dosya var." << endl;
-			return;
+		fsm.createFile(arg1);
+	}
+	else if (command == "search") {
+		if (arg1 == "-bs") {
+			fsm.searchFileBinary(arg2);
 		}
-		fsm.createFile(argument);
+		else if (arg1 == "-bfs") {
+			fsm.searchFileBFS(arg2);
+		}
+		else if (arg1 == "-ls") {
+			fsm.searchFileLinear(arg2);
+		}
 	}
 	else if (command == "cfo") {
-		FileNode* temp = fsm.findFile(fsm.getCurrent(), argument);
-		if (temp != nullptr && temp->isFolder) {
-			cout << "Mevcut konumda ayný isimle bir klasor var." << endl;
-			return;
-		}
-		fsm.createFolder(argument);
+		fsm.createFolder(arg1);
 	}
-	else if (command == "df") {
-		fsm.deleteFile(fsm.getCurrent(), argument);
+	else if (command == "df") { // Delete File
+		fsm.deleteFile(fsm.getCurrent(), arg1);
 	}
-	else if (command == "ref") {
-		string newName;
-		cout << "Yeni adi girin: ";
-		getline(cin, newName);
-		fsm.renameFile(argument, newName);
-	}
-	else if (command == "cl") {
-		if (argument == "..") {
-			fsm.cdUp();
+	else if (command == "ref") { // Rename File
+		if (arg1.empty() || arg2.empty()) {
+			cout << "Hata: Eksik parametre. Kullanim: ref [eskiAd] [yeniAd]\n";
 		}
 		else {
-			fsm.cd(argument);
+			fsm.renameFile(arg1, arg2);
 		}
 	}
+	else if (command == "mv") { // Move File
+		if (arg1.empty() || arg2.empty()) {
+			cout << "Hata: Eksik parametre. Kullanim: mv [dosya] [hedef]\n";
+		}
+		else {
+			fsm.moveFile(arg1, arg2);
+		}
+	}
+	else if (command == "cl") {
+		if (arg1 == "..") fsm.cdUp();
+		else fsm.cd(arg1);
+	}
 	else if (command == "ls") {
-		if (argument == "") fsm.list();
-		else if (argument == "-size") {
-			fsm.listBySize();
-		}
-		else if (argument == "-name") {
-			fsm.listByName();
-		}
+		if (arg1 == "") fsm.list();
+		else if (arg1 == "-size") fsm.listBySize();
+		else if (arg1 == "-tree") fsm.listAsTree();
+		else if (arg1 == "-name") fsm.listByName();
+	}
+	else if (command == "lsr") {
+		fsm.listRecycleBin();
 	}
 	else if (command == "exit") {
 		exit(0);
 	}
 	else {
-		cout << "'" << command << "' gecersiz komut. Komutlarý gormek icin 'help' yazin.\n";
+		cout << "'" << command << "' gecersiz komut. 'help' yazin.\n";
 	}
 }

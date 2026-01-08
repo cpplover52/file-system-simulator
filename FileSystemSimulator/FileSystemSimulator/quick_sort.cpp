@@ -5,8 +5,8 @@
 using std::vector;
 bool compareBySize(FileNode* a, FileNode* b) {
 	// Biri klasör diðeri dosyaysa, klasör (isFolder=true) her zaman küçüktür (üstte yer alýr).
-	if (a->isFolder && !b->isFolder) return true;
-	if (!a->isFolder && b->isFolder) return false;
+	if (a->fileInode.isFolder && !b->fileInode.isFolder) return true;
+	if (!a->fileInode.isFolder && b->fileInode.isFolder) return false;
 	
 	return a->fileInode.fileSize >= b->fileInode.fileSize;
 }

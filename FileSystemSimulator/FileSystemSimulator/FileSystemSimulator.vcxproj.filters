@@ -62,5 +62,14 @@
     <ClInclude Include="merge_sort.h">
       <Filter>Kaynak Dosyaları</Filter>
     </ClInclude>
+    <ClInclude Include="my_queue.h">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClInclude>
+    <ClInclude Include="trie.h">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClInclude>
+    <ClInclude Include="my_stack.h">
+      <Filter>Kaynak Dosyaları</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

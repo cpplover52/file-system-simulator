@@ -140,10 +140,13 @@
   <ItemGroup>
     <ClInclude Include="file_system.h" />
     <ClInclude Include="merge_sort.h" />
+    <ClInclude Include="my_queue.h" />
+    <ClInclude Include="my_stack.h" />
     <ClInclude Include="recycle_bin.h" />
     <ClInclude Include="quick_sort.h" />
     <ClInclude Include="sort_utils.h" />
     <ClInclude Include="time_utils.h" />
+    <ClInclude Include="trie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

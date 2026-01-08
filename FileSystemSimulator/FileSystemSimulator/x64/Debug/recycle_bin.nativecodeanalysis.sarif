@@ -1,0 +1,103 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'RecycleItem::deletedFile' değişkeni başlatılmamış. Her zaman bir üye değişkenini başlatın (type.6)."
+          },
+          "analysisTarget": {
+            "uri": "file:///d:/github projects/file-system-simulator/filesystemsimulator/filesystemsimulator/recycle_bin.cpp"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///D:/Github Projects/file-system-simulator/FileSystemSimulator/FileSystemSimulator/recycle_bin.h"
+                },
+                "region": {
+                  "startLine": 9,
+                  "startColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "RecycleItem::{ctor}",
+                  "decoratedName": "??0RecycleItem@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "RecycleItem::deletedFile"
+          }
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "PREfast Code Analysis",
+          "version": "14.42.34435.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///d:/github projects/file-system-simulator/filesystemsimulator/filesystemsimulator/recycle_bin.cpp"
+          },
+          "roles": [
+            "analysisTarget"
+          ],
+          "hashes": {
+            "sha-256": "13e057ca772ae9b89d732900b5a91b8259d6e6a75c0e10de7a39a9b0a3279ca6"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///D:/Github Projects/file-system-simulator/FileSystemSimulator/FileSystemSimulator/recycle_bin.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "sha-256": "eaecf570bc6d2d60c9bc12e1232b6f7f8341f98f6867857114d971b7e13f0ff5"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///d:/github projects/file-system-simulator/filesystemsimulator/filesystemsimulator/my_queue.h"
+          },
+          "hashes": {
+            "sha-256": "34fea5043f261ca41f39a81aedc90d0835439258b9ec0d577e822094cf3955f1"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///d:/github projects/file-system-simulator/filesystemsimulator/filesystemsimulator/time_utils.h"
+          },
+          "hashes": {
+            "sha-256": "1c1c5216e967050a02e7ea01a83fdc1325cde0d6c60feb976a70ecd3ae89e02d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///d:/github projects/file-system-simulator/filesystemsimulator/filesystemsimulator/file_system.h"
+          },
+          "hashes": {
+            "sha-256": "57e339535819d664b0e6644144d184f2723cc5f6e207e65fc8c31d590401000a"
+          }
+        }
+      ]
+    }
+  ]
+}
