@@ -68,6 +68,9 @@ public:
 	FileNode* findFile(int fileID);
 	vector<FileNode*>::iterator findFileIterator(FileNode* fileNode, const string& fileName);
 	void listRecycleBin();
+	void clearConsole();
+	void setupDemo();
+	void searchFileHash(int fileID);
 	void showFileInfos(FileNode* fileNode);
 	void createFile(const string& fileName, bool isRedoOperation = false);
 	void createFolder(const string& folderName);

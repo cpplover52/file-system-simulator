@@ -23,6 +23,12 @@ void processCommand(FileSystemManager& fsm, const string& input) {
 	else if (command == "redo") {
 		fsm.redo();
 	}
+	else if (command == "clr") {
+		fsm.clearConsole();
+	}
+	else if (command == "demo") { 
+		fsm.setupDemo(); 
+	}
 	else if (command == "finfo") {
 		FileNode* file = fsm.findFile(fsm.getCurrent(), arg1);
 		if (file == nullptr) cout << "Dosya bulunamadi.\n";
@@ -31,9 +37,15 @@ void processCommand(FileSystemManager& fsm, const string& input) {
 	else if (command == "cfi") {
 		fsm.createFile(arg1);
 	}
+	else if (command == "mv") {
+		fsm.moveFile(arg1, arg2);
+	}
 	else if (command == "search") {
 		if (arg1 == "-bs") {
 			fsm.searchFileBinary(arg2);
+		}
+		else if (arg1 == "-hash") {
+			fsm.searchFileBFS(arg2);
 		}
 		else if (arg1 == "-bfs") {
 			fsm.searchFileBFS(arg2);
@@ -41,6 +53,10 @@ void processCommand(FileSystemManager& fsm, const string& input) {
 		else if (arg1 == "-ls") {
 			fsm.searchFileLinear(arg2);
 		}
+		else {
+			cout << "Hata: Eksik veya yanlis parametre. Uygun parametreler: '-bs' , '-bfs' , '-ls' \n";
+		}
+
 	}
 	else if (command == "cfo") {
 		fsm.createFolder(arg1);

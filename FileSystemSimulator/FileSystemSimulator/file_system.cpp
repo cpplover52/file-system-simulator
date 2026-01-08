@@ -4,12 +4,14 @@
 #include "time_utils.h"
 #include "my_queue.h"
 #include "my_stack.h"
+#include <iomanip>
 #include <algorithm>
 #include <cctype>
 #include <string>
 #include <ctime>
 #include <math.h>
 #include <vector>
+#include <chrono>
 using std::vector;
 using std::transform;
 using std::tolower;
@@ -203,14 +205,28 @@ FileNode* FileSystemManager::findFile(int fileID) {
 void FileSystemManager::listRecycleBin() {
 	recycleBin.listBin();
 }
+void FileSystemManager::searchFileHash(int fileID) {
+	// timer basliyor
+	auto start = std::chrono::high_resolution_clock::now();
+	FileNode* file = findFile(fileID);
+	auto end = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+	if (file == nullptr) {
+		cout << "Dosya bulunamadi.\n";
+	}
+	cout << "Dosya " << duration.count() << " mikrosaniyede bulundu: " << getPath(file) << endl;
+}
 void FileSystemManager::searchFileLinear(const string& fileName) {
+	// timer basliyor
+	auto start = std::chrono::high_resolution_clock::now();
 	FileNode* fileNode = findFile(getCurrent(), fileName);
+	auto end = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 	if (fileNode == nullptr) {
 		cout << "Dosya bulunamadi...";
 		return;
 	}
-	string outputStr = "Dosya bulundu: " + getPath(fileNode) + "\n";
-	cout << outputStr;
+	cout << "Dosya " << duration.count() << " mikrosaniyede bulundu: " << getPath(fileNode) << endl;
 }
 void FileSystemManager::searchFileBinary(const string& fileName) {
 	if (current->childFiles.empty()) {
@@ -222,6 +238,8 @@ void FileSystemManager::searchFileBinary(const string& fileName) {
 	vector<FileNode*> copyChilds = current->childFiles;
 	sortByName(copyChilds);
 
+	// timer basliyor
+	auto start = std::chrono::high_resolution_clock::now();
 	int left = 0;
 	int right = copyChilds.size() - 1;
 	string target = fileName; 
@@ -232,10 +250,11 @@ void FileSystemManager::searchFileBinary(const string& fileName) {
 		std::transform(midName.begin(), midName.end(), midName.begin(), ::tolower);// Mevcut ismi küçült
 
 		if (midName == target) {
-			cout << "Dosya bulundu: " << getPath(copyChilds[mid]) << "\n";
+			auto end = std::chrono::high_resolution_clock::now();
+			auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+			cout << "Dosya " << duration.count() << " mikrosaniyede bulundu: " << getPath(copyChilds[mid]) << endl;
 			return;
 		}
-
 		if (midName < target) {
 			left = mid + 1;
 		}
@@ -249,7 +268,8 @@ void FileSystemManager::searchFileBFS(const string& fileName) {
 	if (root == nullptr) {
 		return;
 	}
-
+	// timer basliyor
+	auto start = std::chrono::high_resolution_clock::now();
 	MyQueue<FileNode*> q;
 	q.enqueue(root);
 	FileNode* fileNode;
@@ -257,8 +277,9 @@ void FileSystemManager::searchFileBFS(const string& fileName) {
 		FileNode* currentItem = q.dequeue(); 
 		if (currentItem->fileName == fileName) {
 			fileNode = currentItem;
-			string outputStr = "Dosya bulundu: " + getPath(fileNode);
-			cout << outputStr << endl;
+			auto end = std::chrono::high_resolution_clock::now();
+			auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+			cout << "Dosya " << duration.count() << " mikrosaniyede bulundu: " << getPath(fileNode) << endl;
 			return;
 		}
 		if (currentItem->fileInode.isFolder) {
@@ -267,7 +288,7 @@ void FileSystemManager::searchFileBFS(const string& fileName) {
 			}
 		}
 	}
-	cout << "Dosya bulunamadi...";
+	cout << "Dosya bulunamadi..." << endl;
 	return;
 }
 void FileSystemManager::addToTable(FileNode* fileNode) {
@@ -390,6 +411,7 @@ void FileSystemManager::createFile(const string& fileName, bool isRedoOperation)
 	};
 	current->childFiles.push_back(newFileNode);
 	addToTable(newFileNode);
+	cout << fileName << " basariyla olusturuldu.\n";
 	autoCompleteTrie.insert(fileName); // Otomatik tamamlama için trie'ye eklendi.
 	fileCount++;
 	updateParentSizes(newFileNode->parent, fileSizeByB);
@@ -405,6 +427,7 @@ void FileSystemManager::createFile(const string& fileName, bool isRedoOperation)
 		while (!redoStack.isEmpty()) redoStack.pop();
 	}
 }
+
 void FileSystemManager::deleteNode(FileNode* node) {
 	for (auto child : node->childFiles) {
 		deleteNode(child);
@@ -420,6 +443,7 @@ void FileSystemManager::deleteFile(FileNode* parentFile, const string& fileName)
 	FileNode* fileToDelete = *it;
 	parentFile->childFiles.erase(it);
 	recycleBin.addToBin(fileToDelete);
+	cout << fileName << " silindi.\n";
 	/*deleteNode(fileToDelete);*/
 }
 void FileSystemManager::createFolder(const string& folderName) {
@@ -540,8 +564,51 @@ string FileSystemManager::getPath(FileNode* fileNode) {
 	}
 	return pathStr;
 }
-
+void FileSystemManager::clearConsole() {
+	#ifdef _WIN32
+		system("cls");
+	#else
+		system("clear");
+	#endif
+}
 void FileSystemManager::printCommands() {
+	const int cmdWidth = 25; 
+
+	cout << "\n==============================================================\n";
+	cout << "                DOSYA SISTEMI KOMUT REHBERI                   \n";
+	cout << "==============================================================\n";
+
+	cout << "\n[ SISTEM VE YONETIM ]\n";
+	cout << left << setw(cmdWidth) << "  help" << "-> Tum komutlari listeler\n";
+	cout << left << setw(cmdWidth) << "  undo / redo" << "-> Islemi geri al / ileri al\n";
+	cout << left << setw(cmdWidth) << "  clr" << "-> Konsolu temizler\n";
+	cout << left << setw(cmdWidth) << "  exit" << "-> Programi sonlandirir\n";
+	cout << left << setw(cmdWidth) << "  demo" << "-> Ornek bir dosya mimarisi olusturur.\n";
+
+	cout << "\n[ DOSYA VE KLASOR ISLEMLERI ]\n";
+	cout << left << setw(cmdWidth) << "  cfi [ad]" << "-> Yeni dosya olusturur\n";
+	cout << left << setw(cmdWidth) << "  cfo [ad]" << "-> Yeni klasor olusturur\n";
+	cout << left << setw(cmdWidth) << "  df  [ad]" << "-> Dosya/Klasor siler\n";
+	cout << left << setw(cmdWidth) << "  mv  [kaynak] [hedef]" << "-> Dosya/Klasor tasir\n";
+	cout << left << setw(cmdWidth) << "  ref [eski] [yeni]" << "-> Yeniden adlandirir\n";
+	cout << left << setw(cmdWidth) << "  finfo [ad]" << "-> Detayli bilgileri gosterir\n";
+
+	cout << "\n[ NAVIGASYON VE LISTELEME]\n";
+	cout << left << setw(cmdWidth) << "  cl [ad / ..]" << "-> Dizine git / Ust dizine cik\n";
+	cout << left << setw(cmdWidth) << "  ls" << "-> Varsayilan listeleme\n";
+	cout << left << setw(cmdWidth) << "  ls -name / -size" << "-> Isme / Boyuta gore siralar\n";
+	cout << left << setw(cmdWidth) << "  ls -tree" << "-> Agac yapisinda gosterir\n";
+	cout << left << setw(cmdWidth) << "  lsr" << "-> Geri donusum kutusunu acar\n";
+
+	cout << "\n[ARAMA ALGORITMALARI]\n";
+	cout << left << setw(cmdWidth) << "  search -hash [id]" << "-> Hash tablosunda O(1) zaman karmaþýklýðýna sahip arama (Tum sistem)\n";
+	cout << left << setw(cmdWidth) << "  search -bfs [ad]" << "-> Genislik oncelikli arama (Tum sistem)\n";
+	cout << left << setw(cmdWidth) << "  search -bs  [ad]" << "-> Ikili arama (Mevcut dizin)\n";
+	cout << left << setw(cmdWidth) << "  search -ls  [ad]" << "-> Lineer arama (Mevcut dizin)\n";
+
+	cout << "==============================================================\n" << endl;
+}
+/*void FileSystemManager::printCommands() {
 	cout << "---------\n";
 	cout << "***Komutlar***\n";
 	cout << "help -> Komutlari gösterir\n";
@@ -550,6 +617,7 @@ void FileSystemManager::printCommands() {
 	cout << "cfi [argument]-> Dosya olusturur\n";
 	cout << "cfo [argument] -> Klasor olusturur\n";
 	cout << "finfo [argument] -> Dosya/Klasor bilgilerini gosterir\n";
+	cout << "mv [argument1] [argument2] -> Girilen Dosya/Klasoru yeni konuma tasir.\n";
 	cout << "df [argument] -> Dosya/Klasor siler\n";
 	cout << "ref [argument] -> Dosya/Klasor yeniden adlandirir\n";
 	cout << "search -bfs [argument]-> BFS ile dosyayi mevcut klasorde ve alt klasorlerde arar.\n";
@@ -563,8 +631,42 @@ void FileSystemManager::printCommands() {
 	cout << "ls -tree -> Mevcut konumun altindaki tum dosya ve klasorleri tree gorunumunde listeler.\n";
 	cout << "exit -> Programdan cikar\n";
 	cout << "---------\n";
-}
+}*/
 FileNode* FileSystemManager::getCurrent() { return current; }
+void FileSystemManager::setupDemo() {
+	cout << "Demo ortami kuruluyor...\n";
+
+	// 1. Klasör yapýsýný oluþtur
+	createFolder("Projeler"); // 
+	createFolder("Fotograflar"); // 
+	createFolder("Muzikler"); // 
+
+	// 2. Projeler klasörüne gir ve dosya ekle
+	cd("Projeler"); // 
+	createFile("tez_taslagi.docx"); // 
+	createFile("sunum.pptx"); // 
+	createFolder("Kodlar"); // 
+
+	cd("Kodlar"); // 
+	createFile("main.cpp"); // 
+	createFile("file_system.h"); // 
+	cdUp(); // Projeler klasörüne geri dön 
+	cdUp(); // Root (A:) dizinine geri dön 
+
+	// 3. Fotograflar klasörüne dosya ekle
+	cd("Fotograflar"); // 
+	createFile("tatil.jpg"); // 
+	createFile("manzara.png"); // 
+	cdUp(); // 
+
+	// 4. Muzikler klasörüne dosya ekle
+	cd("Muzikler"); // 
+	createFile("sarki1.mp3"); // 
+	createFile("podcast.wav"); // 
+	cdUp(); // 
+
+	cout << "Demo basariyla kuruldu.\n";
+}
 SizeInfo getNormalizedSize(long long sizeByB) {
 	long long newSize = sizeByB;
 	int unit = 0;
